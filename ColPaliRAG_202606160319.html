@@ -1,0 +1,492 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script>function neighbourhoodHighlight(params) {
+  // console.log("in nieghbourhoodhighlight");
+  allNodes = nodes.get({ returnType: "Object" });
+  // originalNodes = JSON.parse(JSON.stringify(allNodes));
+  // if something is selected:
+  if (params.nodes.length > 0) {
+    highlightActive = true;
+    var i, j;
+    var selectedNode = params.nodes[0];
+    var degrees = 2;
+
+    // mark all nodes as hard to read.
+    for (let nodeId in allNodes) {
+      // nodeColors[nodeId] = allNodes[nodeId].color;
+      allNodes[nodeId].color = "rgba(200,200,200,0.5)";
+      if (allNodes[nodeId].hiddenLabel === undefined) {
+        allNodes[nodeId].hiddenLabel = allNodes[nodeId].label;
+        allNodes[nodeId].label = undefined;
+      }
+    }
+    var connectedNodes = network.getConnectedNodes(selectedNode);
+    var allConnectedNodes = [];
+
+    // get the second degree nodes
+    for (i = 1; i < degrees; i++) {
+      for (j = 0; j < connectedNodes.length; j++) {
+        allConnectedNodes = allConnectedNodes.concat(
+          network.getConnectedNodes(connectedNodes[j])
+        );
+      }
+    }
+
+    // all second degree nodes get a different color and their label back
+    for (i = 0; i < allConnectedNodes.length; i++) {
+      // allNodes[allConnectedNodes[i]].color = "pink";
+      allNodes[allConnectedNodes[i]].color = "rgba(150,150,150,0.75)";
+      if (allNodes[allConnectedNodes[i]].hiddenLabel !== undefined) {
+        allNodes[allConnectedNodes[i]].label =
+          allNodes[allConnectedNodes[i]].hiddenLabel;
+        allNodes[allConnectedNodes[i]].hiddenLabel = undefined;
+      }
+    }
+
+    // all first degree nodes get their own color and their label back
+    for (i = 0; i < connectedNodes.length; i++) {
+      // allNodes[connectedNodes[i]].color = undefined;
+      allNodes[connectedNodes[i]].color = nodeColors[connectedNodes[i]];
+      if (allNodes[connectedNodes[i]].hiddenLabel !== undefined) {
+        allNodes[connectedNodes[i]].label =
+          allNodes[connectedNodes[i]].hiddenLabel;
+        allNodes[connectedNodes[i]].hiddenLabel = undefined;
+      }
+    }
+
+    // the main node gets its own color and its label back.
+    // allNodes[selectedNode].color = undefined;
+    allNodes[selectedNode].color = nodeColors[selectedNode];
+    if (allNodes[selectedNode].hiddenLabel !== undefined) {
+      allNodes[selectedNode].label = allNodes[selectedNode].hiddenLabel;
+      allNodes[selectedNode].hiddenLabel = undefined;
+    }
+  } else if (highlightActive === true) {
+    // console.log("highlightActive was true");
+    // reset all nodes
+    for (let nodeId in allNodes) {
+      // allNodes[nodeId].color = "purple";
+      allNodes[nodeId].color = nodeColors[nodeId];
+      // delete allNodes[nodeId].color;
+      if (allNodes[nodeId].hiddenLabel !== undefined) {
+        allNodes[nodeId].label = allNodes[nodeId].hiddenLabel;
+        allNodes[nodeId].hiddenLabel = undefined;
+      }
+    }
+    highlightActive = false;
+  }
+
+  // transform the object into an array
+  var updateArray = [];
+  if (params.nodes.length > 0) {
+    for (let nodeId in allNodes) {
+      if (allNodes.hasOwnProperty(nodeId)) {
+        // console.log(allNodes[nodeId]);
+        updateArray.push(allNodes[nodeId]);
+      }
+    }
+    nodes.update(updateArray);
+  } else {
+    // console.log("Nothing was selected");
+    for (let nodeId in allNodes) {
+      if (allNodes.hasOwnProperty(nodeId)) {
+        // console.log(allNodes[nodeId]);
+        // allNodes[nodeId].color = {};
+        updateArray.push(allNodes[nodeId]);
+      }
+    }
+    nodes.update(updateArray);
+  }
+}
+
+function filterHighlight(params) {
+  allNodes = nodes.get({ returnType: "Object" });
+  // if something is selected:
+  if (params.nodes.length > 0) {
+    filterActive = true;
+    let selectedNodes = params.nodes;
+
+    // hiding all nodes and saving the label
+    for (let nodeId in allNodes) {
+      allNodes[nodeId].hidden = true;
+      if (allNodes[nodeId].savedLabel === undefined) {
+        allNodes[nodeId].savedLabel = allNodes[nodeId].label;
+        allNodes[nodeId].label = undefined;
+      }
+    }
+
+    for (let i=0; i < selectedNodes.length; i++) {
+      allNodes[selectedNodes[i]].hidden = false;
+      if (allNodes[selectedNodes[i]].savedLabel !== undefined) {
+        allNodes[selectedNodes[i]].label = allNodes[selectedNodes[i]].savedLabel;
+        allNodes[selectedNodes[i]].savedLabel = undefined;
+      }
+    }
+
+  } else if (filterActive === true) {
+    // reset all nodes
+    for (let nodeId in allNodes) {
+      allNodes[nodeId].hidden = false;
+      if (allNodes[nodeId].savedLabel !== undefined) {
+        allNodes[nodeId].label = allNodes[nodeId].savedLabel;
+        allNodes[nodeId].savedLabel = undefined;
+      }
+    }
+    filterActive = false;
+  }
+
+  // transform the object into an array
+  var updateArray = [];
+  if (params.nodes.length > 0) {
+    for (let nodeId in allNodes) {
+      if (allNodes.hasOwnProperty(nodeId)) {
+        updateArray.push(allNodes[nodeId]);
+      }
+    }
+    nodes.update(updateArray);
+  } else {
+    for (let nodeId in allNodes) {
+      if (allNodes.hasOwnProperty(nodeId)) {
+        updateArray.push(allNodes[nodeId]);
+      }
+    }
+    nodes.update(updateArray);
+  }
+}
+
+function selectNode(nodes) {
+  network.selectNodes(nodes);
+  neighbourhoodHighlight({ nodes: nodes });
+  return nodes;
+}
+
+function selectNodes(nodes) {
+  network.selectNodes(nodes);
+  filterHighlight({nodes: nodes});
+  return nodes;
+}
+
+function highlightFilter(filter) {
+  let selectedNodes = []
+  let selectedProp = filter['property']
+  if (filter['item'] === 'node') {
+    let allNodes = nodes.get({ returnType: "Object" });
+    for (let nodeId in allNodes) {
+      if (allNodes[nodeId][selectedProp] && filter['value'].includes((allNodes[nodeId][selectedProp]).toString())) {
+        selectedNodes.push(nodeId)
+      }
+    }
+  }
+  else if (filter['item'] === 'edge'){
+    let allEdges = edges.get({returnType: 'object'});
+    // check if the selected property exists for selected edge and select the nodes connected to the edge
+    for (let edge in allEdges) {
+      if (allEdges[edge][selectedProp] && filter['value'].includes((allEdges[edge][selectedProp]).toString())) {
+        selectedNodes.push(allEdges[edge]['from'])
+        selectedNodes.push(allEdges[edge]['to'])
+      }
+    }
+  }
+  selectNodes(selectedNodes)
+}</script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+            
+            
+            
+            
+            
+
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 800px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+             #loadingBar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width: 100%;
+                 height: 800px;
+                 background-color:rgba(200,200,200,0.8);
+                 -webkit-transition: all 0.5s ease;
+                 -moz-transition: all 0.5s ease;
+                 -ms-transition: all 0.5s ease;
+                 -o-transition: all 0.5s ease;
+                 transition: all 0.5s ease;
+                 opacity:1;
+             }
+
+             #bar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width:20px;
+                 height:20px;
+                 margin:auto auto auto auto;
+                 border-radius:11px;
+                 border:2px solid rgba(30,30,30,0.05);
+                 background: rgb(0, 173, 246); /* Old browsers */
+                 box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+             }
+
+             #border {
+                 position:absolute;
+                 top:10px;
+                 left:10px;
+                 width:500px;
+                 height:23px;
+                 margin:auto auto auto auto;
+                 box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+                 border-radius:10px;
+             }
+
+             #text {
+                 position:absolute;
+                 top:8px;
+                 left:530px;
+                 width:30px;
+                 height:50px;
+                 margin:auto auto auto auto;
+                 font-size:22px;
+                 color: #000000;
+             }
+
+             div.outerBorder {
+                 position:relative;
+                 top:400px;
+                 width:600px;
+                 height:44px;
+                 margin:auto auto auto auto;
+                 border:8px solid rgba(0,0,0,0.1);
+                 background: rgb(252,252,252); /* Old browsers */
+                 background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+                 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+                 background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+                 background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+                 background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+                 background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+                 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+                 border-radius:72px;
+                 box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+             }
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+            <div id="loadingBar">
+              <div class="outerBorder">
+                <div id="text">0%</div>
+                <div id="border">
+                  <div id="bar"></div>
+                </div>
+              </div>
+            </div>
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#6495ED", "id": "python_function:run", "label": "pipeline::\nrun", "shape": "dot", "size": 17.333333333333332, "title": "run\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\pipeline.py\nCalled by: 2\nCalls: 2"}, {"color": "#6495ED", "id": "python_function:setup_logging", "label": "pipeline::\nsetup_logging", "shape": "dot", "size": 17.333333333333332, "title": "setup_logging\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\pipeline.py\nCalled by: 7\nCalls: 0"}, {"color": "#6495ED", "id": "python_function:run_pipeline", "label": "pipeline::\nrun_pipeline", "shape": "dot", "size": 25.333333333333336, "title": "run_pipeline\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\pipeline.py\nCalled by: 1\nCalls: 12"}, {"color": "#6495ED", "id": "python_function:stats", "label": "pipeline::\nstats", "shape": "dot", "size": 15.833333333333334, "title": "stats\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\pipeline.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:query", "label": "pipeline::\nquery", "shape": "dot", "size": 15.833333333333334, "title": "query\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\pipeline.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:viz", "label": "pipeline::\nviz", "shape": "dot", "size": 17.5, "title": "viz\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\pipeline.py\nCalled by: 0\nCalls: 3"}, {"color": "#6495ED", "id": "python_function:export_pyvis", "label": "visualize::\nexport_pyvis", "shape": "dot", "size": 16.5, "title": "export_pyvis\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\visualize.py\nCalled by: 2\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:export_matplotlib", "label": "visualize::\nexport_matplotlib", "shape": "dot", "size": 16.5, "title": "export_matplotlib\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\visualize.py\nCalled by: 2\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:setup", "label": "pipeline::\nsetup", "shape": "dot", "size": 17.5, "title": "setup\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\pipeline.py\nCalled by: 0\nCalls: 3"}, {"color": "#6495ED", "id": "python_function:detect_profile", "label": "setup::\ndetect_profile", "shape": "dot", "size": 20.0, "title": "detect_profile\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\setup.py\nCalled by: 15\nCalls: 0"}, {"color": "#6495ED", "id": "python_function:bootstrap_profile", "label": "setup::\nbootstrap_profile", "shape": "dot", "size": 18.666666666666668, "title": "bootstrap_profile\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\setup.py\nCalled by: 1\nCalls: 4"}, {"color": "#6495ED", "id": "python_function:doctor", "label": "pipeline::\ndoctor", "shape": "dot", "size": 17.5, "title": "doctor\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\pipeline.py\nCalled by: 0\nCalls: 3"}, {"color": "#6495ED", "id": "python_function:check_profile_health", "label": "health::\ncheck_profile_health", "shape": "dot", "size": 20.333333333333332, "title": "check_profile_health\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\health.py\nCalled by: 1\nCalls: 6"}, {"color": "#6495ED", "id": "python_function:extract_pilot", "label": "pipeline::\nextract_pilot", "shape": "dot", "size": 19.166666666666668, "title": "extract_pilot\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\pipeline.py\nCalled by: 0\nCalls: 5"}, {"color": "#6495ED", "id": "python_function:load_corpus", "label": "ingest::\nload_corpus", "shape": "dot", "size": 16.5, "title": "load_corpus\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\ingest.py\nCalled by: 2\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:write_pilot_report", "label": "extract_pilot::\nwrite_pilot_report", "shape": "dot", "size": 17.5, "title": "write_pilot_report\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\extract_pilot.py\nCalled by: 5\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:parse_backend_spec", "label": "extract_pilot::\nparse_backend_spec", "shape": "dot", "size": 18.5, "title": "parse_backend_spec\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\extract_pilot.py\nCalled by: 8\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:run_pilot", "label": "extract_pilot::\nrun_pilot", "shape": "dot", "size": 17.0, "title": "run_pilot\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\extract_pilot.py\nCalled by: 1\nCalls: 2"}, {"color": "#6495ED", "id": "python_function:chunk_text", "label": "ingest::\nchunk_text", "shape": "dot", "size": 16.166666666666668, "title": "chunk_text\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\ingest.py\nCalled by: 1\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:make_id", "label": "ingest::\nmake_id", "shape": "dot", "size": 15.333333333333334, "title": "make_id\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\ingest.py\nCalled by: 1\nCalls: 0"}, {"color": "#6495ED", "id": "python_function:resolve", "label": "dedup::\nresolve", "shape": "dot", "size": 16.833333333333332, "title": "resolve\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\dedup.py\nCalled by: 3\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:from_entity", "label": "dedup::\nfrom_entity", "shape": "dot", "size": 15.333333333333334, "title": "from_entity\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\dedup.py\nCalled by: 1\nCalls: 0"}, {"color": "#6495ED", "id": "python_function:resolve_triples", "label": "dedup::\nresolve_triples", "shape": "dot", "size": 16.166666666666668, "title": "resolve_triples\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\dedup.py\nCalled by: 1\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:build_graph", "label": "graph::\nbuild_graph", "shape": "dot", "size": 16.166666666666668, "title": "build_graph\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\graph.py\nCalled by: 1\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:all_entities", "label": "dedup::\nall_entities", "shape": "dot", "size": 15.333333333333334, "title": "all_entities\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\dedup.py\nCalled by: 1\nCalls: 0"}, {"color": "#6495ED", "id": "python_function:graph_stats", "label": "graph::\ngraph_stats", "shape": "dot", "size": 16.166666666666668, "title": "graph_stats\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\graph.py\nCalled by: 1\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:get", "label": "dedup::\nget", "shape": "dot", "size": 25.0, "title": "get\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\dedup.py\nCalled by: 30\nCalls: 0"}, {"color": "#6495ED", "id": "python_function:export_cypher_file", "label": "export_neo4j::\nexport_cypher_file", "shape": "dot", "size": 16.166666666666668, "title": "export_cypher_file\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\export_neo4j.py\nCalled by: 1\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:import_to_neo4j", "label": "export_neo4j::\nimport_to_neo4j", "shape": "dot", "size": 16.166666666666668, "title": "import_to_neo4j\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\export_neo4j.py\nCalled by: 1\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:export_csv", "label": "export_csv::\nexport_csv", "shape": "dot", "size": 16.166666666666668, "title": "export_csv\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\export_csv.py\nCalled by: 1\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:export_sqlite", "label": "export_csv::\nexport_sqlite", "shape": "dot", "size": 16.166666666666668, "title": "export_sqlite\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\export_csv.py\nCalled by: 1\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:find_infra_dir", "label": "setup::\nfind_infra_dir", "shape": "dot", "size": 16.166666666666668, "title": "find_infra_dir\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\setup.py\nCalled by: 1\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:load_config", "label": "profile::\nload_config", "shape": "dot", "size": 21.166666666666668, "title": "load_config\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\llm\\profile.py\nCalled by: 16\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:effective_config_to_yaml", "label": "profile::\neffective_config_to_yaml", "shape": "dot", "size": 15.666666666666666, "title": "effective_config_to_yaml\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\llm\\profile.py\nCalled by: 2\nCalls: 0"}, {"color": "#6495ED", "id": "python_function:check_qdrant", "label": "health::\ncheck_qdrant", "shape": "dot", "size": 16.166666666666668, "title": "check_qdrant\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\health.py\nCalled by: 1\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:check_neo4j", "label": "health::\ncheck_neo4j", "shape": "dot", "size": 16.166666666666668, "title": "check_neo4j\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\health.py\nCalled by: 1\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:check_llm_endpoint", "label": "health::\ncheck_llm_endpoint", "shape": "dot", "size": 16.166666666666668, "title": "check_llm_endpoint\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\health.py\nCalled by: 1\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:check_privacy_gate", "label": "health::\ncheck_privacy_gate", "shape": "dot", "size": 17.0, "title": "check_privacy_gate\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\health.py\nCalled by: 1\nCalls: 2"}, {"color": "#6495ED", "id": "python_function:is_api_url", "label": "text::\nis_api_url", "shape": "dot", "size": 15.666666666666666, "title": "is_api_url\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\llm\\text.py\nCalled by: 2\nCalls: 0"}, {"color": "#6495ED", "id": "python_function:build_extractor", "label": "extract_pilot::\nbuild_extractor", "shape": "dot", "size": 16.166666666666668, "title": "build_extractor\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\extract_pilot.py\nCalled by: 1\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:extract", "label": "extract::\nextract", "shape": "dot", "size": 16.833333333333332, "title": "extract\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\extract.py\nCalled by: 3\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:top_n_disagreements", "label": "extract_pilot::\ntop_n_disagreements", "shape": "dot", "size": 15.666666666666666, "title": "top_n_disagreements\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\extract_pilot.py\nCalled by: 2\nCalls: 0"}, {"color": "#6495ED", "id": "python_function:build_prompt", "label": "extract::\nbuild_prompt", "shape": "dot", "size": 15.333333333333334, "title": "build_prompt\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\extract.py\nCalled by: 1\nCalls: 0"}, {"color": "#6495ED", "id": "python_function:extract_batch", "label": "extract::\nextract_batch", "shape": "dot", "size": 16.166666666666668, "title": "extract_batch\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\extract.py\nCalled by: 1\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:from_yaml", "label": "pipeline::\nfrom_yaml", "shape": "dot", "size": 15.833333333333334, "title": "from_yaml\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\pipeline.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:export_graphml", "label": "export_csv::\nexport_graphml", "shape": "dot", "size": 15.333333333333334, "title": "export_graphml\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\export_csv.py\nCalled by: 1\nCalls: 0"}, {"color": "#6495ED", "id": "python_function:pytest_collection_modifyitems", "label": "conftest::\npytest_collection_modifyitems", "shape": "dot", "size": 15.833333333333334, "title": "pytest_collection_modifyitems\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\conftest.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:main", "label": "fetch_fixtures::\nmain", "shape": "dot", "size": 15.833333333333334, "title": "main\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\fixtures\\animals\\fetch_fixtures.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:download", "label": "fetch_fixtures::\ndownload", "shape": "dot", "size": 15.333333333333334, "title": "download\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\fixtures\\animals\\fetch_fixtures.py\nCalled by: 1\nCalls: 0"}, {"color": "#6495ED", "id": "python_function:test_no_profile_returns_default", "label": "test_profile_loader::\ntest_no_profile_returns_default", "shape": "dot", "size": 15.833333333333334, "title": "test_no_profile_returns_default\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_profile_loader.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_profile_overlay_merged", "label": "test_profile_loader::\ntest_profile_overlay_merged", "shape": "dot", "size": 15.833333333333334, "title": "test_profile_overlay_merged\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_profile_loader.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_unknown_profile_raises", "label": "test_profile_loader::\ntest_unknown_profile_raises", "shape": "dot", "size": 15.833333333333334, "title": "test_unknown_profile_raises\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_profile_loader.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_missing_default_raises", "label": "test_profile_loader::\ntest_missing_default_raises", "shape": "dot", "size": 15.833333333333334, "title": "test_missing_default_raises\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_profile_loader.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_missing_profile_file_raises", "label": "test_profile_loader::\ntest_missing_profile_file_raises", "shape": "dot", "size": 15.833333333333334, "title": "test_missing_profile_file_raises\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_profile_loader.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_env_var_fallback", "label": "test_profile_loader::\ntest_env_var_fallback", "shape": "dot", "size": 15.833333333333334, "title": "test_env_var_fallback\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_profile_loader.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_explicit_profile_beats_env_var", "label": "test_profile_loader::\ntest_explicit_profile_beats_env_var", "shape": "dot", "size": 15.833333333333334, "title": "test_explicit_profile_beats_env_var\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_profile_loader.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_real_profile_files_exist_and_load", "label": "test_profile_loader::\ntest_real_profile_files_exist_and_load", "shape": "dot", "size": 16.666666666666668, "title": "test_real_profile_files_exist_and_load\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_profile_loader.py\nCalled by: 0\nCalls: 2"}, {"color": "#6495ED", "id": "python_function:test_profile_private_blocks_api", "label": "test_profile_loader::\ntest_profile_private_blocks_api", "shape": "dot", "size": 15.833333333333334, "title": "test_profile_private_blocks_api\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_profile_loader.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_profile_server_allows_api", "label": "test_profile_loader::\ntest_profile_server_allows_api", "shape": "dot", "size": 15.833333333333334, "title": "test_profile_server_allows_api\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_profile_loader.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_workstation_uses_locked_7b_pair", "label": "test_profile_loader::\ntest_workstation_uses_locked_7b_pair", "shape": "dot", "size": 15.833333333333334, "title": "test_workstation_uses_locked_7b_pair\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_profile_loader.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_effective_config_to_yaml_round_trips", "label": "test_profile_loader::\ntest_effective_config_to_yaml_round_trips", "shape": "dot", "size": 15.833333333333334, "title": "test_effective_config_to_yaml_round_trips\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_profile_loader.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_no_gpu_is_laptop", "label": "test_setup_detect_profile::\ntest_no_gpu_is_laptop", "shape": "dot", "size": 15.833333333333334, "title": "test_no_gpu_is_laptop\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_setup_detect_profile.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_no_gpu_with_big_ram_still_laptop", "label": "test_setup_detect_profile::\ntest_no_gpu_with_big_ram_still_laptop", "shape": "dot", "size": 15.833333333333334, "title": "test_no_gpu_with_big_ram_still_laptop\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_setup_detect_profile.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_small_gpu_is_laptop", "label": "test_setup_detect_profile::\ntest_small_gpu_is_laptop", "shape": "dot", "size": 15.833333333333334, "title": "test_small_gpu_is_laptop\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_setup_detect_profile.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_just_under_12gb_is_laptop", "label": "test_setup_detect_profile::\ntest_just_under_12gb_is_laptop", "shape": "dot", "size": 15.833333333333334, "title": "test_just_under_12gb_is_laptop\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_setup_detect_profile.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_exactly_12gb_is_workstation", "label": "test_setup_detect_profile::\ntest_exactly_12gb_is_workstation", "shape": "dot", "size": 15.833333333333334, "title": "test_exactly_12gb_is_workstation\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_setup_detect_profile.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_rtx_4090_is_workstation", "label": "test_setup_detect_profile::\ntest_rtx_4090_is_workstation", "shape": "dot", "size": 15.833333333333334, "title": "test_rtx_4090_is_workstation\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_setup_detect_profile.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_just_under_40gb_is_workstation", "label": "test_setup_detect_profile::\ntest_just_under_40gb_is_workstation", "shape": "dot", "size": 15.833333333333334, "title": "test_just_under_40gb_is_workstation\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_setup_detect_profile.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_a100_is_server", "label": "test_setup_detect_profile::\ntest_a100_is_server", "shape": "dot", "size": 15.833333333333334, "title": "test_a100_is_server\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_setup_detect_profile.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_h100_is_server", "label": "test_setup_detect_profile::\ntest_h100_is_server", "shape": "dot", "size": 15.833333333333334, "title": "test_h100_is_server\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_setup_detect_profile.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_dgx_spark_unified_memory_is_server", "label": "test_setup_detect_profile::\ntest_dgx_spark_unified_memory_is_server", "shape": "dot", "size": 15.833333333333334, "title": "test_dgx_spark_unified_memory_is_server\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_setup_detect_profile.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_big_ram_triggers_server_even_at_workstation_vram", "label": "test_setup_detect_profile::\ntest_big_ram_triggers_server_even_at_workstation_vram", "shape": "dot", "size": 15.833333333333334, "title": "test_big_ram_triggers_server_even_at_workstation_vram\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_setup_detect_profile.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_private_never_auto_selected", "label": "test_setup_detect_profile::\ntest_private_never_auto_selected", "shape": "dot", "size": 15.833333333333334, "title": "test_private_never_auto_selected\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_setup_detect_profile.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_default_call_returns_a_known_profile", "label": "test_setup_detect_profile::\ntest_default_call_returns_a_known_profile", "shape": "dot", "size": 15.833333333333334, "title": "test_default_call_returns_a_known_profile\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_setup_detect_profile.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_classifies", "label": "test_llm_facade_routing::\ntest_classifies", "shape": "dot", "size": 15.833333333333334, "title": "test_classifies\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_llm_facade_routing.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_builds_openai_compat_for_local_url", "label": "test_llm_facade_routing::\ntest_builds_openai_compat_for_local_url", "shape": "dot", "size": 15.833333333333334, "title": "test_builds_openai_compat_for_local_url\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_llm_facade_routing.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_builds_openai_compat_for_api_url_when_gate_open", "label": "test_llm_facade_routing::\ntest_builds_openai_compat_for_api_url_when_gate_open", "shape": "dot", "size": 15.833333333333334, "title": "test_builds_openai_compat_for_api_url_when_gate_open\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_llm_facade_routing.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_privacy_gate_fires_on_empty_base_url", "label": "test_llm_facade_routing::\ntest_privacy_gate_fires_on_empty_base_url", "shape": "dot", "size": 15.833333333333334, "title": "test_privacy_gate_fires_on_empty_base_url\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_llm_facade_routing.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_privacy_gate_fires_on_explicit_openai_url", "label": "test_llm_facade_routing::\ntest_privacy_gate_fires_on_explicit_openai_url", "shape": "dot", "size": 15.833333333333334, "title": "test_privacy_gate_fires_on_explicit_openai_url\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_llm_facade_routing.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_privacy_gate_fires_on_anthropic_url", "label": "test_llm_facade_routing::\ntest_privacy_gate_fires_on_anthropic_url", "shape": "dot", "size": 15.833333333333334, "title": "test_privacy_gate_fires_on_anthropic_url\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_llm_facade_routing.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_local_url_passes_with_closed_gate", "label": "test_llm_facade_routing::\ntest_local_url_passes_with_closed_gate", "shape": "dot", "size": 15.833333333333334, "title": "test_local_url_passes_with_closed_gate\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_llm_facade_routing.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_missing_text_llm_section_raises", "label": "test_llm_facade_routing::\ntest_missing_text_llm_section_raises", "shape": "dot", "size": 15.833333333333334, "title": "test_missing_text_llm_section_raises\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_llm_facade_routing.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_privacy_gate_fires_on_api_url", "label": "test_llm_facade_routing::\ntest_privacy_gate_fires_on_api_url", "shape": "dot", "size": 15.833333333333334, "title": "test_privacy_gate_fires_on_api_url\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_llm_facade_routing.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_missing_vision_llm_section_raises", "label": "test_llm_facade_routing::\ntest_missing_vision_llm_section_raises", "shape": "dot", "size": 15.833333333333334, "title": "test_missing_vision_llm_section_raises\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_llm_facade_routing.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_profile_private_text_facade_with_qwen_url_succeeds", "label": "test_llm_facade_routing::\ntest_profile_private_text_facade_with_qwen_url_succeeds", "shape": "dot", "size": 16.666666666666668, "title": "test_profile_private_text_facade_with_qwen_url_succeeds\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_llm_facade_routing.py\nCalled by: 0\nCalls: 2"}, {"color": "#6495ED", "id": "python_function:test_profile_private_vision_facade_with_qwen_url_succeeds", "label": "test_llm_facade_routing::\ntest_profile_private_vision_facade_with_qwen_url_succeeds", "shape": "dot", "size": 16.666666666666668, "title": "test_profile_private_vision_facade_with_qwen_url_succeeds\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_llm_facade_routing.py\nCalled by: 0\nCalls: 2"}, {"color": "#6495ED", "id": "python_function:test_profile_private_rejects_swapped_in_openai_url", "label": "test_llm_facade_routing::\ntest_profile_private_rejects_swapped_in_openai_url", "shape": "dot", "size": 16.666666666666668, "title": "test_profile_private_rejects_swapped_in_openai_url\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_llm_facade_routing.py\nCalled by: 0\nCalls: 2"}, {"color": "#6495ED", "id": "python_function:test_uses_injected_llm", "label": "test_extract_facade_routing::\ntest_uses_injected_llm", "shape": "dot", "size": 16.666666666666668, "title": "test_uses_injected_llm\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_extract_facade_routing.py\nCalled by: 0\nCalls: 2"}, {"color": "#6495ED", "id": "python_function:complete", "label": "vision::\ncomplete", "shape": "dot", "size": 15.666666666666666, "title": "complete\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\llm\\vision.py\nCalled by: 2\nCalls: 0"}, {"color": "#6495ED", "id": "python_function:chat", "label": "text::\nchat", "shape": "dot", "size": 15.666666666666666, "title": "chat\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\kg_pipeline\\llm\\text.py\nCalled by: 2\nCalls: 0"}, {"color": "#6495ED", "id": "python_function:test_injected_llm_is_used_for_extraction", "label": "test_extract_facade_routing::\ntest_injected_llm_is_used_for_extraction", "shape": "dot", "size": 17.5, "title": "test_injected_llm_is_used_for_extraction\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_extract_facade_routing.py\nCalled by: 0\nCalls: 3"}, {"color": "#6495ED", "id": "python_function:test_simple_openai", "label": "test_extract_pilot_report::\ntest_simple_openai", "shape": "dot", "size": 15.833333333333334, "title": "test_simple_openai\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_extract_pilot_report.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_with_base_url", "label": "test_extract_pilot_report::\ntest_with_base_url", "shape": "dot", "size": 15.833333333333334, "title": "test_with_base_url\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_extract_pilot_report.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_empty_api_key_env_for_local_backend", "label": "test_extract_pilot_report::\ntest_empty_api_key_env_for_local_backend", "shape": "dot", "size": 15.833333333333334, "title": "test_empty_api_key_env_for_local_backend\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_extract_pilot_report.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_allow_api_providers_false", "label": "test_extract_pilot_report::\ntest_allow_api_providers_false", "shape": "dot", "size": 15.833333333333334, "title": "test_allow_api_providers_false\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_extract_pilot_report.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_invalid_spec_raises", "label": "test_extract_pilot_report::\ntest_invalid_spec_raises", "shape": "dot", "size": 15.833333333333334, "title": "test_invalid_spec_raises\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_extract_pilot_report.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_label_renders", "label": "test_extract_pilot_report::\ntest_label_renders", "shape": "dot", "size": 15.833333333333334, "title": "test_label_renders\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_extract_pilot_report.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_label_for_api_backend", "label": "test_extract_pilot_report::\ntest_label_for_api_backend", "shape": "dot", "size": 15.833333333333334, "title": "test_label_for_api_backend\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_extract_pilot_report.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_top_n_disagreements_ordered_by_delta", "label": "test_extract_pilot_report::\ntest_top_n_disagreements_ordered_by_delta", "shape": "dot", "size": 15.833333333333334, "title": "test_top_n_disagreements_ordered_by_delta\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_extract_pilot_report.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_writes_markdown_file", "label": "test_extract_pilot_report::\ntest_writes_markdown_file", "shape": "dot", "size": 15.833333333333334, "title": "test_writes_markdown_file\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_extract_pilot_report.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_report_contains_expected_sections", "label": "test_extract_pilot_report::\ntest_report_contains_expected_sections", "shape": "dot", "size": 15.833333333333334, "title": "test_report_contains_expected_sections\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_extract_pilot_report.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_gate_passes_at_80_percent_ratio", "label": "test_extract_pilot_report::\ntest_gate_passes_at_80_percent_ratio", "shape": "dot", "size": 15.833333333333334, "title": "test_gate_passes_at_80_percent_ratio\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_extract_pilot_report.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_gate_fails_below_70_percent", "label": "test_extract_pilot_report::\ntest_gate_fails_below_70_percent", "shape": "dot", "size": 15.833333333333334, "title": "test_gate_fails_below_70_percent\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\unit\\test_extract_pilot_report.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:colqwen", "label": "test_vision_text_alignment::\ncolqwen", "shape": "dot", "size": 15.833333333333334, "title": "colqwen\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\gpu\\test_vision_text_alignment.py\nCalled by: 0\nCalls: 1"}, {"color": "#6495ED", "id": "python_function:test_uv_lock_is_up_to_date", "label": "test_uv_install_clean::\ntest_uv_lock_is_up_to_date", "shape": "dot", "size": 15.833333333333334, "title": "test_uv_lock_is_up_to_date\nType: python_function\nDefined in: AutoKG\\kg_pipeline\\kg_pipeline\\tests\\integration\\test_uv_install_clean.py\nCalled by: 0\nCalls: 1"}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "python_function:run", "to": "python_function:setup_logging"}, {"arrows": "to", "from": "python_function:run", "to": "python_function:run_pipeline"}, {"arrows": "to", "from": "python_function:stats", "to": "python_function:setup_logging"}, {"arrows": "to", "from": "python_function:query", "to": "python_function:setup_logging"}, {"arrows": "to", "from": "python_function:viz", "to": "python_function:export_pyvis"}, {"arrows": "to", "from": "python_function:viz", "to": "python_function:export_matplotlib"}, {"arrows": "to", "from": "python_function:viz", "to": "python_function:setup_logging"}, {"arrows": "to", "from": "python_function:setup", "to": "python_function:detect_profile"}, {"arrows": "to", "from": "python_function:setup", "to": "python_function:setup_logging"}, {"arrows": "to", "from": "python_function:setup", "to": "python_function:bootstrap_profile"}, {"arrows": "to", "from": "python_function:doctor", "to": "python_function:detect_profile"}, {"arrows": "to", "from": "python_function:doctor", "to": "python_function:setup_logging"}, {"arrows": "to", "from": "python_function:doctor", "to": "python_function:check_profile_health"}, {"arrows": "to", "from": "python_function:extract_pilot", "to": "python_function:load_corpus"}, {"arrows": "to", "from": "python_function:extract_pilot", "to": "python_function:write_pilot_report"}, {"arrows": "to", "from": "python_function:extract_pilot", "to": "python_function:setup_logging"}, {"arrows": "to", "from": "python_function:extract_pilot", "to": "python_function:parse_backend_spec"}, {"arrows": "to", "from": "python_function:extract_pilot", "to": "python_function:run_pilot"}, {"arrows": "to", "from": "python_function:chunk_text", "to": "python_function:make_id"}, {"arrows": "to", "from": "python_function:load_corpus", "to": "python_function:chunk_text"}, {"arrows": "to", "from": "python_function:resolve", "to": "python_function:from_entity"}, {"arrows": "to", "from": "python_function:resolve_triples", "to": "python_function:resolve"}, {"arrows": "to", "from": "python_function:build_graph", "to": "python_function:all_entities"}, {"arrows": "to", "from": "python_function:graph_stats", "to": "python_function:get"}, {"arrows": "to", "from": "python_function:export_cypher_file", "to": "python_function:get"}, {"arrows": "to", "from": "python_function:import_to_neo4j", "to": "python_function:run"}, {"arrows": "to", "from": "python_function:export_csv", "to": "python_function:get"}, {"arrows": "to", "from": "python_function:export_sqlite", "to": "python_function:get"}, {"arrows": "to", "from": "python_function:export_pyvis", "to": "python_function:get"}, {"arrows": "to", "from": "python_function:export_matplotlib", "to": "python_function:get"}, {"arrows": "to", "from": "python_function:find_infra_dir", "to": "python_function:resolve"}, {"arrows": "to", "from": "python_function:bootstrap_profile", "to": "python_function:find_infra_dir"}, {"arrows": "to", "from": "python_function:bootstrap_profile", "to": "python_function:load_config"}, {"arrows": "to", "from": "python_function:bootstrap_profile", "to": "python_function:effective_config_to_yaml"}, {"arrows": "to", "from": "python_function:bootstrap_profile", "to": "python_function:resolve"}, {"arrows": "to", "from": "python_function:check_qdrant", "to": "python_function:get"}, {"arrows": "to", "from": "python_function:check_neo4j", "to": "python_function:get"}, {"arrows": "to", "from": "python_function:check_llm_endpoint", "to": "python_function:get"}, {"arrows": "to", "from": "python_function:check_privacy_gate", "to": "python_function:is_api_url"}, {"arrows": "to", "from": "python_function:check_privacy_gate", "to": "python_function:get"}, {"arrows": "to", "from": "python_function:check_profile_health", "to": "python_function:check_qdrant"}, {"arrows": "to", "from": "python_function:check_profile_health", "to": "python_function:get"}, {"arrows": "to", "from": "python_function:check_profile_health", "to": "python_function:load_config"}, {"arrows": "to", "from": "python_function:check_profile_health", "to": "python_function:check_llm_endpoint"}, {"arrows": "to", "from": "python_function:check_profile_health", "to": "python_function:check_neo4j"}, {"arrows": "to", "from": "python_function:check_profile_health", "to": "python_function:check_privacy_gate"}, {"arrows": "to", "from": "python_function:parse_backend_spec", "to": "python_function:get"}, {"arrows": "to", "from": "python_function:build_extractor", "to": "python_function:get"}, {"arrows": "to", "from": "python_function:run_pilot", "to": "python_function:build_extractor"}, {"arrows": "to", "from": "python_function:run_pilot", "to": "python_function:extract"}, {"arrows": "to", "from": "python_function:write_pilot_report", "to": "python_function:top_n_disagreements"}, {"arrows": "to", "from": "python_function:extract", "to": "python_function:build_prompt"}, {"arrows": "to", "from": "python_function:extract_batch", "to": "python_function:extract"}, {"arrows": "to", "from": "python_function:from_yaml", "to": "python_function:get"}, {"arrows": "to", "from": "python_function:run_pipeline", "to": "python_function:load_corpus"}, {"arrows": "to", "from": "python_function:run_pipeline", "to": "python_function:graph_stats"}, {"arrows": "to", "from": "python_function:run_pipeline", "to": "python_function:import_to_neo4j"}, {"arrows": "to", "from": "python_function:run_pipeline", "to": "python_function:export_pyvis"}, {"arrows": "to", "from": "python_function:run_pipeline", "to": "python_function:build_graph"}, {"arrows": "to", "from": "python_function:run_pipeline", "to": "python_function:export_cypher_file"}, {"arrows": "to", "from": "python_function:run_pipeline", "to": "python_function:extract_batch"}, {"arrows": "to", "from": "python_function:run_pipeline", "to": "python_function:export_matplotlib"}, {"arrows": "to", "from": "python_function:run_pipeline", "to": "python_function:export_graphml"}, {"arrows": "to", "from": "python_function:run_pipeline", "to": "python_function:resolve_triples"}, {"arrows": "to", "from": "python_function:run_pipeline", "to": "python_function:export_sqlite"}, {"arrows": "to", "from": "python_function:run_pipeline", "to": "python_function:export_csv"}, {"arrows": "to", "from": "python_function:load_config", "to": "python_function:get"}, {"arrows": "to", "from": "python_function:pytest_collection_modifyitems", "to": "python_function:get"}, {"arrows": "to", "from": "python_function:main", "to": "python_function:download"}, {"arrows": "to", "from": "python_function:test_no_profile_returns_default", "to": "python_function:load_config"}, {"arrows": "to", "from": "python_function:test_profile_overlay_merged", "to": "python_function:load_config"}, {"arrows": "to", "from": "python_function:test_unknown_profile_raises", "to": "python_function:load_config"}, {"arrows": "to", "from": "python_function:test_missing_default_raises", "to": "python_function:load_config"}, {"arrows": "to", "from": "python_function:test_missing_profile_file_raises", "to": "python_function:load_config"}, {"arrows": "to", "from": "python_function:test_env_var_fallback", "to": "python_function:load_config"}, {"arrows": "to", "from": "python_function:test_explicit_profile_beats_env_var", "to": "python_function:load_config"}, {"arrows": "to", "from": "python_function:test_real_profile_files_exist_and_load", "to": "python_function:get"}, {"arrows": "to", "from": "python_function:test_real_profile_files_exist_and_load", "to": "python_function:load_config"}, {"arrows": "to", "from": "python_function:test_profile_private_blocks_api", "to": "python_function:load_config"}, {"arrows": "to", "from": "python_function:test_profile_server_allows_api", "to": "python_function:load_config"}, {"arrows": "to", "from": "python_function:test_workstation_uses_locked_7b_pair", "to": "python_function:load_config"}, {"arrows": "to", "from": "python_function:test_effective_config_to_yaml_round_trips", "to": "python_function:effective_config_to_yaml"}, {"arrows": "to", "from": "python_function:test_no_gpu_is_laptop", "to": "python_function:detect_profile"}, {"arrows": "to", "from": "python_function:test_no_gpu_with_big_ram_still_laptop", "to": "python_function:detect_profile"}, {"arrows": "to", "from": "python_function:test_small_gpu_is_laptop", "to": "python_function:detect_profile"}, {"arrows": "to", "from": "python_function:test_just_under_12gb_is_laptop", "to": "python_function:detect_profile"}, {"arrows": "to", "from": "python_function:test_exactly_12gb_is_workstation", "to": "python_function:detect_profile"}, {"arrows": "to", "from": "python_function:test_rtx_4090_is_workstation", "to": "python_function:detect_profile"}, {"arrows": "to", "from": "python_function:test_just_under_40gb_is_workstation", "to": "python_function:detect_profile"}, {"arrows": "to", "from": "python_function:test_a100_is_server", "to": "python_function:detect_profile"}, {"arrows": "to", "from": "python_function:test_h100_is_server", "to": "python_function:detect_profile"}, {"arrows": "to", "from": "python_function:test_dgx_spark_unified_memory_is_server", "to": "python_function:detect_profile"}, {"arrows": "to", "from": "python_function:test_big_ram_triggers_server_even_at_workstation_vram", "to": "python_function:detect_profile"}, {"arrows": "to", "from": "python_function:test_private_never_auto_selected", "to": "python_function:detect_profile"}, {"arrows": "to", "from": "python_function:test_default_call_returns_a_known_profile", "to": "python_function:detect_profile"}, {"arrows": "to", "from": "python_function:test_classifies", "to": "python_function:is_api_url"}, {"arrows": "to", "from": "python_function:test_builds_openai_compat_for_local_url", "to": "python_function:get"}, {"arrows": "to", "from": "python_function:test_builds_openai_compat_for_api_url_when_gate_open", "to": "python_function:get"}, {"arrows": "to", "from": "python_function:test_privacy_gate_fires_on_empty_base_url", "to": "python_function:get"}, {"arrows": "to", "from": "python_function:test_privacy_gate_fires_on_explicit_openai_url", "to": "python_function:get"}, {"arrows": "to", "from": "python_function:test_privacy_gate_fires_on_anthropic_url", "to": "python_function:get"}, {"arrows": "to", "from": "python_function:test_local_url_passes_with_closed_gate", "to": "python_function:get"}, {"arrows": "to", "from": "python_function:test_missing_text_llm_section_raises", "to": "python_function:get"}, {"arrows": "to", "from": "python_function:test_privacy_gate_fires_on_api_url", "to": "python_function:get"}, {"arrows": "to", "from": "python_function:test_missing_vision_llm_section_raises", "to": "python_function:get"}, {"arrows": "to", "from": "python_function:test_profile_private_text_facade_with_qwen_url_succeeds", "to": "python_function:get"}, {"arrows": "to", "from": "python_function:test_profile_private_text_facade_with_qwen_url_succeeds", "to": "python_function:load_config"}, {"arrows": "to", "from": "python_function:test_profile_private_vision_facade_with_qwen_url_succeeds", "to": "python_function:get"}, {"arrows": "to", "from": "python_function:test_profile_private_vision_facade_with_qwen_url_succeeds", "to": "python_function:load_config"}, {"arrows": "to", "from": "python_function:test_profile_private_rejects_swapped_in_openai_url", "to": "python_function:get"}, {"arrows": "to", "from": "python_function:test_profile_private_rejects_swapped_in_openai_url", "to": "python_function:load_config"}, {"arrows": "to", "from": "python_function:test_uses_injected_llm", "to": "python_function:complete"}, {"arrows": "to", "from": "python_function:test_uses_injected_llm", "to": "python_function:chat"}, {"arrows": "to", "from": "python_function:test_injected_llm_is_used_for_extraction", "to": "python_function:complete"}, {"arrows": "to", "from": "python_function:test_injected_llm_is_used_for_extraction", "to": "python_function:chat"}, {"arrows": "to", "from": "python_function:test_injected_llm_is_used_for_extraction", "to": "python_function:extract"}, {"arrows": "to", "from": "python_function:test_simple_openai", "to": "python_function:parse_backend_spec"}, {"arrows": "to", "from": "python_function:test_with_base_url", "to": "python_function:parse_backend_spec"}, {"arrows": "to", "from": "python_function:test_empty_api_key_env_for_local_backend", "to": "python_function:parse_backend_spec"}, {"arrows": "to", "from": "python_function:test_allow_api_providers_false", "to": "python_function:parse_backend_spec"}, {"arrows": "to", "from": "python_function:test_invalid_spec_raises", "to": "python_function:parse_backend_spec"}, {"arrows": "to", "from": "python_function:test_label_renders", "to": "python_function:parse_backend_spec"}, {"arrows": "to", "from": "python_function:test_label_for_api_backend", "to": "python_function:parse_backend_spec"}, {"arrows": "to", "from": "python_function:test_top_n_disagreements_ordered_by_delta", "to": "python_function:top_n_disagreements"}, {"arrows": "to", "from": "python_function:test_writes_markdown_file", "to": "python_function:write_pilot_report"}, {"arrows": "to", "from": "python_function:test_report_contains_expected_sections", "to": "python_function:write_pilot_report"}, {"arrows": "to", "from": "python_function:test_gate_passes_at_80_percent_ratio", "to": "python_function:write_pilot_report"}, {"arrows": "to", "from": "python_function:test_gate_fails_below_70_percent", "to": "python_function:write_pilot_report"}, {"arrows": "to", "from": "python_function:colqwen", "to": "python_function:get"}, {"arrows": "to", "from": "python_function:test_uv_lock_is_up_to_date", "to": "python_function:run"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "physics"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+                      network.on("stabilizationProgress", function(params) {
+                          document.getElementById('loadingBar').removeAttribute("style");
+                          var maxWidth = 496;
+                          var minWidth = 20;
+                          var widthFactor = params.iterations/params.total;
+                          var width = Math.max(minWidth,maxWidth * widthFactor);
+                          document.getElementById('bar').style.width = width + 'px';
+                          document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+                      });
+                      network.once("stabilizationIterationsDone", function() {
+                          document.getElementById('text').innerHTML = '100%';
+                          document.getElementById('bar').style.width = '496px';
+                          document.getElementById('loadingBar').style.opacity = 0;
+                          // really clean the dom element
+                          setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+                      });
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+<script type="text/javascript">
+// Ctrl+Click to remove node, its edges, and any newly-isolated nodes
+network.on("click", function(params) {
+    if (params.event.srcEvent.ctrlKey && params.nodes.length > 0) {
+        var nodeId = params.nodes[0];
+        var connectedEdges = network.getConnectedEdges(nodeId);
+        edges.remove(connectedEdges);
+        nodes.remove(nodeId);
+        // Remove any nodes that are now isolated (no remaining edges)
+        var allNodeIds = nodes.getIds();
+        var isolated = [];
+        allNodeIds.forEach(function(nid) {
+            if (network.getConnectedEdges(nid).length === 0) {
+                isolated.push(nid);
+            }
+        });
+        if (isolated.length > 0) {
+            nodes.remove(isolated);
+        }
+        console.log("Removed node: " + nodeId + " (+" + isolated.length + " isolated)");
+    }
+});
+</script>
+</body>
+</html>
