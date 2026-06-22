@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang xml:lang>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Jim Grant on the AI Bubble and Why the Next Crash Won&#39;t Look Like 2008</title>
+  <style>
+html {
+color: #1a1a1a;
+background-color: #fdfdfd;
+}
+body {
+margin: 0 auto;
+max-width: 36em;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 50px;
+padding-bottom: 50px;
+hyphens: auto;
+overflow-wrap: break-word;
+text-rendering: optimizeLegibility;
+font-kerning: normal;
+}
+@media (max-width: 600px) {
+body {
+font-size: 0.9em;
+padding: 12px;
+}
+h1 {
+font-size: 1.8em;
+}
+}
+@media print {
+html {
+background-color: white;
+}
+body {
+background-color: transparent;
+color: black;
+font-size: 12pt;
+}
+p, h2, h3 {
+orphans: 3;
+widows: 3;
+}
+h2, h3, h4 {
+page-break-after: avoid;
+}
+}
+p {
+margin: 1em 0;
+}
+a {
+color: #1a1a1a;
+}
+a:visited {
+color: #1a1a1a;
+}
+img {
+max-width: 100%;
+}
+svg {
+height: auto;
+max-width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+margin-top: 1.4em;
+}
+h5, h6 {
+font-size: 1em;
+font-style: italic;
+}
+h6 {
+font-weight: normal;
+}
+ol, ul {
+padding-left: 1.7em;
+margin-top: 1em;
+}
+li > ol, li > ul {
+margin-top: 0;
+}
+blockquote {
+margin: 1em 0 1em 1.7em;
+padding-left: 1em;
+border-left: 2px solid #e6e6e6;
+color: #606060;
+}
+code {
+font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+font-size: 85%;
+margin: 0;
+hyphens: manual;
+}
+pre {
+margin: 1em 0;
+overflow: auto;
+}
+pre code {
+padding: 0;
+overflow: visible;
+overflow-wrap: normal;
+}
+.sourceCode {
+background-color: transparent;
+overflow: visible;
+}
+hr {
+border: none;
+border-top: 1px solid #1a1a1a;
+height: 1px;
+margin: 1em 0;
+}
+table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+overflow-x: auto;
+display: block;
+font-variant-numeric: lining-nums tabular-nums;
+}
+table caption {
+margin-bottom: 0.75em;
+}
+tbody {
+margin-top: 0.5em;
+border-top: 1px solid #1a1a1a;
+border-bottom: 1px solid #1a1a1a;
+}
+th {
+border-top: 1px solid #1a1a1a;
+padding: 0.25em 0.5em 0.25em 0.5em;
+}
+td {
+padding: 0.125em 0.5em 0.25em 0.5em;
+}
+header {
+margin-bottom: 4em;
+text-align: center;
+}
+#TOC li {
+list-style: none;
+}
+#TOC ul {
+padding-left: 1.3em;
+}
+#TOC > ul {
+padding-left: 0;
+}
+#TOC a:not(:hover) {
+text-decoration: none;
+}
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+  <style>
+:root {
+--accent: #059669;
+--accent-dim: #34d399;
+--text: #1f2933;
+--text-dim: #52606d;
+--bg: #ffffff;
+--bg-soft: #f5f7fa;
+--border: #e2e8f0;
+}
+html { scroll-behavior: smooth; }
+body {
+font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+color: var(--text);
+background: var(--bg);
+line-height: 1.65;
+max-width: 880px;
+margin: 0 auto;
+padding: 3rem 1.5rem 6rem;
+font-size: 17px;
+}
+h1 {
+font-size: 2.1rem;
+line-height: 1.2;
+letter-spacing: -0.5px;
+border-bottom: 3px solid var(--accent);
+padding-bottom: 0.5rem;
+margin-bottom: 1rem;
+}
+h2 {
+font-size: 1.5rem;
+margin-top: 2.6rem;
+padding-top: 1.2rem;
+border-top: 1px solid var(--border);
+color: #0f172a;
+letter-spacing: -0.3px;
+}
+h3 {
+font-size: 1.18rem;
+margin-top: 1.8rem;
+color: var(--accent);
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+h2#table-of-contents + ul { background: var(--bg-soft); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.4rem 1rem 2.4rem; }
+h2#table-of-contents { border-top: none; }
+ul { margin: 0.4rem 0; }
+li { margin: 0.15rem 0; }
+img {
+max-width: 100%;
+height: auto;
+display: block;
+margin: 1.4rem auto 0.6rem;
+border: 1px solid var(--border);
+border-radius: 8px;
+box-shadow: 0 4px 16px rgba(15, 23, 42, 0.10);
+}
+p > em:only-child { color: var(--text-dim); font-size: 0.85rem; letter-spacing: 0.5px; }
+blockquote {
+border-left: 4px solid var(--accent);
+margin: 1.3rem 0;
+padding: 0.4rem 0 0.4rem 1.2rem;
+color: #0f172a;
+font-style: italic;
+background: var(--bg-soft);
+border-radius: 0 8px 8px 0;
+}
+code {
+background: #eef2f7;
+padding: 0.12em 0.4em;
+border-radius: 4px;
+font-size: 0.88em;
+font-family: "SF Mono", "Fira Code", Consolas, monospace;
+}
+table { border-collapse: collapse; width: 100%; margin: 1.4rem 0; font-size: 0.95rem; }
+th, td { border: 1px solid var(--border); padding: 0.6rem 0.8rem; text-align: left; vertical-align: top; }
+th { background: var(--accent); color: #fff; }
+tr:nth-child(even) td { background: var(--bg-soft); }
+hr { border: none; border-top: 1px solid var(--border); margin: 2.2rem 0; }
+strong { color: #0f172a; }
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Jim Grant on the AI Bubble and Why the Next Crash
+Won&#39;t Look Like 2008</h1>
+</header>
+<h1 id="jim-grant-on-the-ai-bubble-and-why-the-next-crash-wont-look-like-2008">Jim
+Grant on the AI Bubble and Why the Next Crash Won’t Look Like 2008</h1>
+<p><strong>Source:</strong> <em>The Meb Faber Show</em> (Cambria
+Investment Management) <strong>Participants:</strong> Meb Faber (host)
+in conversation with Jim Grant (founder and editor of <em>Grant’s
+Interest Rate Observer</em>) <strong>URL:</strong>
+https://youtu.be/mq0r92gLkLw <strong>Runtime:</strong> ~1h 05m</p>
+<blockquote>
+<p>This is a lightly cleaned, verbatim transcript of the interview.
+Filler words, false starts, and dead repetition have been removed; the
+speakers’ words and phrasing are preserved. The host is labeled
+<strong>Meb Faber</strong>; the guest is <strong>Jim Grant</strong>.
+Section headings follow the episode’s own chapter markers. The opening
+series promo and compliance disclaimer are condensed and marked
+<code>*[Aside]*</code>. Timestamps (<code>*[~MM:SS]*</code>) mark
+roughly five-minute intervals.</p>
+<p><strong>Transcription artifacts corrected:</strong> host “Me / Met
+Baber” → <strong>Meb Faber</strong>; “Camry” → <strong>Cambria</strong>;
+“Ben Espernanki / Bernani / Bernaki” → <strong>Bernanke</strong>;
+“William Mcchesny Martin” → <strong>William McChesney Martin</strong>;
+“John Kenneth Grey” → <strong>John Kenneth Galbraith</strong>;
+“Professor Schiller” → <strong>Shiller</strong>; “Leaquad Ahmed” →
+<strong>Liaquat Ahamed</strong>; “Apollo Athen” →
+<strong>Apollo–Athene</strong>; “J. Pal / JPEL” →
+<strong>Powell</strong>; “Eckles building” → <strong>Eccles
+Building</strong>; “Kevin Worsh” → <strong>Kevin Warsh</strong>; “Scott
+Bess” → <strong>Scott Bessent</strong>; “Paul Vulkar” → <strong>Paul
+Volcker</strong>; “Krueger rand” → <strong>Krugerrand</strong>; “Charlie
+Mer” → <strong>Charlie Munger</strong>; “Murray Stall” → <strong>Murray
+Stahl</strong>; “Bernard M. Baroo” → <strong>Bernard Baruch</strong>;
+“Texas Golf Self” → <strong>Texas Gulf Sulphur</strong>; “Dracula
+Miller” → <strong>Druckenmiller</strong>; “lobboss” →
+<strong>LBOs</strong>; “GAP” → <strong>GAAP</strong>; “cats and lions
+and tigers” → <strong>CATS, LIONS, and TIGRs</strong> (1980s zero-coupon
+Treasuries).</p>
+</blockquote>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#the-ai-mania">The AI Mania</a></li>
+<li><a href="#railroads-1873-and-creative-destruction">Railroads, 1873,
+and Creative Destruction</a></li>
+<li><a href="#cape-ratios-and-the-long-road-back">CAPE Ratios and the
+Long Road Back</a></li>
+<li><a href="#why-deflation-is-not-the-enemy">Why Deflation Is Not the
+Enemy</a></li>
+<li><a href="#the-ratchet-prices-only-go-up">The Ratchet: Prices Only Go
+Up</a></li>
+<li><a href="#leverage-and-the-trap-of-where-rates-were">Leverage and
+the Trap of Where Rates Were</a></li>
+<li><a href="#private-credit-and-the-insurance-time-bomb">Private Credit
+and the Insurance Time Bomb</a></li>
+<li><a href="#grading-powell-and-the-2-target">Grading Powell and the 2%
+Target</a></li>
+<li><a href="#kevin-warsh-gold-and-celebrity-central-bankers">Kevin
+Warsh, Gold, and Celebrity Central Bankers</a></li>
+<li><a href="#too-much-money-inflation-as-overstraining">Too Much Money:
+Inflation as Overstraining</a></li>
+<li><a href="#the-feds-hidden-constraint">The Fed’s Hidden
+Constraint</a></li>
+<li><a href="#how-to-fix-the-federal-reserve">How to Fix the Federal
+Reserve</a></li>
+<li><a href="#gold-a-40-year-story">Gold: A 40-Year Story</a></li>
+<li><a href="#building-a-portfolio-in-2026">Building a Portfolio in
+2026</a></li>
+<li><a href="#jims-most-memorable-investment">Jim’s Most Memorable
+Investment</a></li>
+<li><a href="#markets-can-do-anything">Markets Can Do Anything</a></li>
+<li><a href="#the-lesson-of-1984">The Lesson of 1984</a></li>
+<li><a href="#key-takeaways">Key Takeaways</a></li>
+</ul>
+<hr />
+<h2 id="the-ai-mania">The AI Mania</h2>
+<p><em>[~0:39]</em></p>
+<p><em>[Aside]</em> The episode opens with a promo for Meb Faber’s
+series and book, <em>Investing in America: The Rise of a 250-Year Bull
+Market</em>, and a Cambria Investment Management compliance
+disclaimer.</p>
+<p><strong>Meb Faber:</strong> My guest today is <strong>Jim
+Grant</strong>, founder and editor of <em>Grant’s Interest Rate
+Observer</em>, which he’s been publishing since 1983 — financial
+historian, one of the most respected observers on Wall Street. Jim,
+welcome.</p>
+<p><strong>Jim Grant:</strong> Thank you, Meb. Nice to be here.</p>
+<p><strong>Meb Faber:</strong> We heard a stat that if you combine
+SpaceX, OpenAI, and Anthropic potential IPOs, inflation-adjusted, they
+are as big as all the IPOs of the ’90s combined. The 1990s is my
+favorite bubble — I didn’t think we’d see anything like it again in my
+lifetime, but here we are. What do you think?</p>
+<p><strong>Jim Grant:</strong> I think the excitement surrounding the
+potentialities of <strong>artificial intelligence dwarfs</strong> the
+excitement generated by the worldwide web, the internet, and fiber-optic
+cables — and the dollars, even adjusted for inflation, are larger today.
+The role of the Fed is more intrusive, more problematical than it was
+then. A great deal is riding on the efficacy of the technology on which
+the world’s hopes are hanging, and a great deal is contingent on whether
+we have correctly calculated or <em>mis</em>calculated the demand for
+tokens, for data centers, for all the capital that goes into AI.</p>
+<p>You’d think any technology with “intelligence” in the word would be
+up-to-date on supply and demand, but I doubt it. There’s a great deal of
+overbuilding and double-ordering, just like the late 1990s. People
+thought such was the high degree of organization of information that
+there’d be nothing like the macro miscalculations of yesteryear.</p>
+<blockquote>
+<p>“But it turns out the human speculative spirit is a pretty wild
+thing, and is not necessarily grounded by better technology. On the
+contrary, sometimes that can only incite it. I think today is one of the
+greatest bubbles of all time.”</p>
+</blockquote>
+<hr />
+<h2 id="railroads-1873-and-creative-destruction">Railroads, 1873, and
+Creative Destruction</h2>
+<p><em>[~4:18]</em></p>
+<p><strong>Meb Faber:</strong> As a historian, do you feel special
+getting to experience it? What’s the better comparison — railroads,
+fiber optics?</p>
+<p><strong>Jim Grant:</strong> <strong>Railroads.</strong> We’re talking
+about a technology that was instrumental in setting the American price
+level into a generational cascade to the downside. There was a great
+panic in <strong>1873</strong> with all the usual preceding conditions
+of excess. The panic ended, as all panics do — but what did not end was
+the persistent decline in prices of all kinds, going down 2–3% a year
+for 20 years. People felt it keenly; there was a great hurrah in our
+politics about the “crime” of removing silver from our monetary
+system.</p>
+<p>I reviewed a book for the <em>Wall Street Journal</em> — titled
+simply <em>1873</em>, by <strong>Liaquat Ahamed</strong> (who wrote
+<em>Lords of Finance</em>). My criticism was that the author didn’t take
+the proper measure of the role of <strong>technology</strong> in cutting
+the ground out from under prices. What set prices tumbling and real
+wages rising was human progress — the positive destruction of time and
+distance with the opening of the <strong>Suez Canal in 1869.</strong> It
+destroyed fixed capital — the London warehouses built for the long-haul
+trade around the Cape of Good Hope to India — as sail gave way to steam
+and world commodity markets unified through rail, steam, and the
+telegraph. A great display of the power of <strong>creative
+destruction.</strong></p>
+<p>So here we are, many generations later, confronted with a technology
+about which we know very little. It can crack ancient mathematical
+formulas — and also fail to count milk cartons. The CFO of Uber was
+quoted saying, “It’s a wondrous technology, but we don’t see it in our
+P&amp;L; we can’t really rationalize the expense just now.”</p>
+<blockquote>
+<p>“What we do know is that the capital draw on AI is as great as it was
+on the railroads. The value proposition of railroads was simple — iron
+horse, what do you want? Now it is AI-augmented human intelligence
+planning it. All this is terrifically important and also unknowable at
+the moment.”</p>
+</blockquote>
+<hr />
+<h2 id="cape-ratios-and-the-long-road-back">CAPE Ratios and the Long
+Road Back</h2>
+<p><em>[~8:51]</em></p>
+<p><strong>Meb Faber:</strong> Professor <strong>Shiller</strong> is
+famous for his 10-year P/E, but fewer people have read his papers on
+CAPE ratios for industrials, utilities, and railroads. In the 1920s,
+utilities hit a CAPE near 60 — and after the Depression, railroads got
+to a CAPE of two-and-change. An 80% decline will do that. Some sectors
+that become very dear can end up on the opposite extreme not too far
+away.</p>
+<p><strong>Jim Grant:</strong> The rails are famous for it. The stock
+market made its 1929 high; the <strong>industrials returned to the 1929
+level only in 1954</strong> — and that, incidentally, was the year
+<strong>John Kenneth Galbraith’s</strong> <em>The Great Crash</em> came
+out, a cautionary book published in the very year the Dow recaptured its
+25-year highs, because the world was worried about a recurrence of 1929.
+People looking backward weren’t factoring in the extraordinarily cheap
+level of the market, or America’s place leading the recovery from the
+Second World War — it was set up for a demographic, industrial,
+technological grand slam. The industrials made their new high in 1954,
+but the rails (then the transports) didn’t make it until 1965 or
+’66.</p>
+<p>These transformative technologies don’t have to be so all-consuming
+of our attention and capital as AI or the railroads. <strong>Air
+conditioning</strong> was as transformative in its way — it changed
+migration patterns, made the Sun Belt habitable, gave us the year-round
+Congress, isn’t that great — yet in the ’50s, the air-conditioning
+stocks like Carrier traded at four, five, six, eight times earnings.</p>
+<blockquote>
+<p>“This time of ours is in some ways very familiar — patterns conform
+to the usual cyclical touch points — but this one is much bigger, much
+more lurid than almost any preceding cycle.”</p>
+</blockquote>
+<hr />
+<h2 id="why-deflation-is-not-the-enemy">Why Deflation Is Not the
+Enemy</h2>
+<p><em>[~12:27]</em></p>
+<p><strong>Meb Faber:</strong> You’ve said: what the Fed calls
+deflation, a normal person would call progress. Why is everyone so
+scared of deflation?</p>
+<p><strong>Jim Grant:</strong> Deflation is a scare word.
+<strong>Bernanke</strong>, Ph.D., invoked it frequently during the
+2007–13 period because he wanted to avoid a recurrence of the 1930s —
+you’ll recall him going almost on bended knee to Milton Friedman,
+saying, “Yeah, we did it [the Fed], and we’re not going to do it again.”
+But that wasn’t the foremost memory in the 1940s and ’50s. In 1954,
+<strong>William McChesney Martin</strong>, the Fed chairman, gave a talk
+on inflation and said, “You can never regain the purchasing power you
+have lost to inflation” — in a period when the CPI was actually showing
+<em>negative</em> year-over-year values. Nobody said, “Mr. Chairman,
+we’re having deflation right now.” It didn’t come up.</p>
+<p>The key distinction: a <strong>financial deflation</strong> is the
+collapse of the price level owing to a collapse in <em>credit</em> — and
+by definition it entails major bank failures and credit destruction.
+There was nothing like that in the railroad-era deflation in this
+country. In <strong>2008</strong>, the banking system was genuinely in
+trouble — if the government hadn’t salvaged the chestnuts from the fire,
+every financial institution of consequence in New York would have been
+toast. “The greatest failure of ratings and risk management ever.” So
+the inflation fear wasn’t <em>entirely</em> a red herring — but Bernanke
+didn’t do us a great turn by single-mindedly invoking the 30s to address
+2009–12, pushing the funds rate down and unleashing all manner of
+distortions.</p>
+<hr />
+<h2 id="the-ratchet-prices-only-go-up">The Ratchet: Prices Only Go
+Up</h2>
+<p><em>[~16:34]</em></p>
+<p><strong>Jim Grant:</strong> What people fail to grasp is that, after
+a big inflation, it’s less about the <em>rate of change</em> and more
+that prices went up and <strong>stayed there.</strong> Your coffee went
+to $10 — it doesn’t matter if inflation is now 1 or 2%; coffee is still
+$10. It never came down.</p>
+<blockquote>
+<p>“That’s the foremost feature of our monetary world today: only
+ratcheting up, never ratcheting down.”</p>
+</blockquote>
+<p>The price level was broadly unchanged over 125 years into the 20th
+century — but with plenty of ups <em>and</em> downs. The
+deflation-worriers do have one argument: in a very leveraged world,
+<strong>falling prices can do terrific damage to balance sheets built
+only for prosperity.</strong> Our world is full of private credit,
+private equity, leveraged sovereigns, people who’ve taken out personal
+<strong>LBOs</strong> to buy a house. In that setting, a falling price
+level would be very hard to manage.</p>
+<hr />
+<h2 id="leverage-and-the-trap-of-where-rates-were">Leverage and the Trap
+of Where Rates Were</h2>
+<p><em>[~17:37]</em></p>
+<p><strong>Jim Grant:</strong> That’s the trouble with this inflationary
+boom. If the Fed has to raise rates to beat back rising prices, what
+about all the businesses capitalized for very low borrowing costs?</p>
+<blockquote>
+<p>“Where rates <em>were</em> is almost as important nowadays as where
+rates are <em>going</em>.”</p>
+</blockquote>
+<p>Rates were effectively zero in 2020–22, low enough that private
+equity did transactions with six or eight turns of leverage — and
+borrowing costs that will never again be as low as when they were
+incurred. People are gagging now on a funds rate below 4% and dreading 5
+or 6%, which would be entirely reasonable if inflation goes to 4–4.5%.
+If El Niño turns out to be a problem, if the Strait of Hormuz doesn’t
+obey instructions from Washington — what happens then?</p>
+<hr />
+<h2 id="private-credit-and-the-insurance-time-bomb">Private Credit and
+the Insurance Time Bomb</h2>
+<p><em>[~19:53]</em></p>
+<p><strong>Meb Faber:</strong> Corporate and junk spreads are razor-thin
+relative to T-bills. How much is just price-insensitive buyers —
+pensions, insurers — reaching for yield?</p>
+<p><strong>Jim Grant:</strong> That’s an element. But with insurance
+there’s also the <strong>Apollo–Athene model</strong> of life-insurance
+investing: a management style determined to <em>minimize</em> the equity
+portion (the surplus) and <em>maximize</em> spread income by investing
+heavily in securities that are speculative-grade or near it —
+floating-rate, in the case of private credit. Investors were reaching
+frantically for yield in 2020 and on, and there’s a structural change
+within the life-insurance industry. As the consultancy notes, a good
+part of the composite insurance portfolio is committed to private credit
+— and <strong>one-third of $6 trillion</strong> of life-insurance assets
+is in some form of private credit.</p>
+<p><strong>Meb Faber:</strong> A third of six trillion is still two
+trillion. It’s a lot of money when you say it fast. What’s funny is that
+very smart people — captains of industry, CIOs — preface their comments
+with, “I don’t really know what they’re doing in private credit.” You
+don’t hear that anywhere else.</p>
+<p><strong>Jim Grant:</strong> It’s not unprecedented. Remember 2005–06?
+“I don’t know what a <strong>CDO-squared</strong> is, but we sure have a
+lot of them.” There was a terrific deficit of knowledge about
+mortgage-credit structures before the crisis. There’s a certain
+opaqueness about private credit — and a certain openness from the
+promoters, who say, “We are doing nothing more than making good loans
+banks are no longer allowed to make.” I heard, only a couple of years
+ago, the prediction that private credit would <em>replace</em> banks —
+which hasn’t happened. To wrap up this particular speech: I don’t think
+it’s any more opaque or resistant to analysis than the mortgage
+structures were.</p>
+<hr />
+<h2 id="grading-powell-and-the-2-target">Grading Powell and the 2%
+Target</h2>
+<p><em>[~25:09]</em></p>
+<p><strong>Meb Faber:</strong> Give us your grade for the exiting chair
+— A to F.</p>
+<p><strong>Jim Grant:</strong> Chairman <strong>Powell</strong> doesn’t
+need me to remind him of his errors. He joined the board around 2010–11,
+from private equity. If you read the FOMC transcripts, J. Powell was
+forthright and on-point in his critique of the abuse of financial
+leverage and its risks to the macroeconomy. Then years passed, and — as
+happens in all these institutions — you get absorbed into the
+institutional worldview. He became a great deal more
+<strong>complacent</strong> about leverage, and he bought into the
+new-age idea that the Fed owed the world a 2% rate of inflation that
+we’d call “price stability.”</p>
+<blockquote>
+<p>“That is Kafkaesque. People keep saying it; it doesn’t make it any
+less weird. 2% a year is a tax on your cash. It’s the government taking
+value — and Congress alone has the power to levy a tax. What’s the Fed
+doing?”</p>
+</blockquote>
+<p>He bought into it in 2020, of all times — the idea that if the Fed
+delivered <em>less</em> than 2%, it owed us a rate <em>higher</em> than
+2% so it would average 2% over time — on the very eve of inflation going
+to 9% in the stimulus spike. A terribly mistimed <em>and</em>
+misconceived call. At one point he said we’d “have to unlearn what we
+learned about the money supply” as M2 was rising 20% year-over-year.</p>
+<p>I don’t mean to pettifog the departing chairman — I’ve committed
+plenty of errors myself. His problem was <strong>insufficient detachment
+from the institutional view of the Fed.</strong> I do admire how he kept
+his dignity in the face of attacks from the man who appointed him. One
+real fault: he got behind the powers intent on barring <strong>Judy
+Shelton</strong> from the board — she wanted the Fed to have some
+grounding in the discipline of gold. I believe Powell actively resisted
+her candidacy, which was political malpractice, if you ask me — which
+you did.</p>
+<hr />
+<h2 id="kevin-warsh-gold-and-celebrity-central-bankers">Kevin Warsh,
+Gold, and Celebrity Central Bankers</h2>
+<p><em>[~29:47]</em></p>
+<p><strong>Jim Grant:</strong> <strong>Kevin Warsh</strong> was at our
+conference last year. The rule is: anyone who sits down with me for an
+interview goes on the federal payroll — before that, <strong>Scott
+Bessent</strong> was the featured guest and he was hired by the
+government too. I blew the Warsh interview: the first thing I asked was
+whether it bothered him that the Fed, if it kept its books by
+<strong>GAAP</strong> instead of its DIY system, is “solvent only by
+courtesy” — actually broke. Kevin said, “Well, Jim, it’s a pleasure to
+be here, ladies and gentlemen.” So I lost the moral edge. But as we left
+the stage — I’d put in a word for my hobbyhorse, gold — Kevin said,
+“Jim, you can’t go back.” He does want a smaller Fed balance sheet and a
+less obtrusive central bank.</p>
+<blockquote>
+<p>“If the Fed were doing its job properly, we would not know the names
+of these people, as we know the names of the leading RBI champions in
+the National League. The central bankers have become celebrities — a
+sign of the deterioration in our monetary affairs.”</p>
+</blockquote>
+<p>I once offered on Twitter to chair the Fed — my only input would be
+to peg the funds rate to the 2-year note, call it a day, drink a few
+beers, and reconvene next quarter, letting the market figure it out.
+They haven’t called.</p>
+<hr />
+<h2 id="too-much-money-inflation-as-overstraining">Too Much Money:
+Inflation as Overstraining</h2>
+<p><em>[~32:19]</em></p>
+<p><strong>Meb Faber:</strong> You’ve said it’s not “too much money
+chasing too few goods” — it’s just too much money, and where it chases
+is variable: sometimes your cappuccino, sometimes New York real estate,
+sometimes stocks, sometimes farmland. I just met an adviser whose client
+sold farmland for <strong>$300,000 an acre</strong> — to an AI data
+center, who’s less price-sensitive than the corn farmer down the
+street.</p>
+<p><strong>Jim Grant:</strong> I did say it, and I think inflation is a
+matter of <strong>overstraining</strong> generally — the productive
+apparatus, the labor market, the financial system. A question of
+too-muchness, which is largely a function of monetary indiscipline. In a
+paper-money regime without the discipline of convertibility, there’s a
+permanent element of <strong>helium</strong> — things want to go up. In
+the 1990s, when labor was outsourced to India and China entered the WTO,
+goods were cheap and there was little <em>measured</em> inflation — but
+there was a lot of inflation “at the corner of Broad and Wall.”</p>
+<p>You can measure inflation by core PCE, trimmed-mean core CPI — all
+manner of recondite price indices — and pick out the ones that make it
+look tame. McChesney Martin would identify excessive valuations and
+leverage in the stock market as a <em>species</em> of inflation. Today,
+because of the reign of the econometricians, there’s much less
+willingness to take a qualitative view. Look at the IPO market; margin
+debt has roughly doubled in the past year; the Chicago Fed’s Financial
+Conditions Index says <em>easy money.</em> So why would you want to cut
+rates? Well — because somebody says so.</p>
+<hr />
+<h2 id="the-feds-hidden-constraint">The Fed’s Hidden Constraint</h2>
+<p><em>[~37:05]</em></p>
+<p><strong>Meb Faber:</strong> Could inflation tick up while bond rates
+rise too, putting the Fed in a pickle? Do they just let it happen and
+inflate away the debt? Rob Arnott showed that when inflation runs above
+4–5%, the average CAPE is in the low teens — and we’re at 43 today.</p>
+<p><strong>Jim Grant:</strong> I think they’ll be very attentive to the
+<strong>stability of credit.</strong> Nobody gives a speech warning of a
+materially higher funds rate in this time of high leverage and
+precarious goings-on in, for example, the life-insurance business — but
+that’s what we’ve been writing about. The Fed is <strong>constrained in
+ways it does not acknowledge</strong> — constrained against an
+aggressive attack on inflation in a time of extreme financial leverage.
+That leverage now also describes the federal finances: you can easily
+imagine the government issuing T-bills to service the existing stock of
+T-bills — <strong>borrowing money to meet interest expense.</strong>
+That’s called Ponzi finance.</p>
+<p>The more immediate problem is lower-rated corporate borrowers rolling
+over debt incurred at very low rates — especially at 100–200 basis
+points higher. Officially the Fed has a dual mandate; there’s a
+little-noted third (stable, moderate long-term rates); but the fourth is
+<strong>Wall Street</strong> — financial stability, the 401(k)
+mandate.</p>
+<blockquote>
+<p>“Do you really want to be the guy who sank the stock market from a
+CAPE ratio where it is today? The Fed is up against the valuations it
+does not discuss, the margin debt it does not discuss, and most of all
+the leverage its own suppressed interest rates instigated. Much of it is
+its own doing.”</p>
+</blockquote>
+<hr />
+<h2 id="how-to-fix-the-federal-reserve">How to Fix the Federal
+Reserve</h2>
+<p><em>[~41:10]</em></p>
+<p><strong>Meb Faber:</strong> Any president gives you 10 minutes. What
+would you tell them?</p>
+<p><strong>Jim Grant:</strong> A few things I’ve always thought the Fed
+needs to do: be <strong>less obtrusive</strong>, run a <strong>smaller
+balance sheet</strong>, ditch the dual mandate, concentrate on really
+stable prices, acknowledge it is broke as an item of financial hygiene —
+and <strong>put some gold in its basement</strong> as a marker of its
+commitment to sound finance.</p>
+<p>We also need to restore <strong>personal responsibility</strong> to
+financial outcomes. Part of the ethos of the gold standard was the
+<strong>double-liability rule</strong>: bank stockholders were
+themselves responsible for the bank’s solvency — they’d get a capital
+call, not the FDIC (of which there was none). That institution went out
+the window around 1935, but it spoke well of our ancestors: they
+realized banks are precarious by nature of their leverage, that
+stockholders got the dividends on the upside and ought, in justice, to
+front the capital on the downside.</p>
+<p>The currency ought to be redeemable as a marker of the government’s
+commitment to fiscal probity — not a 2%-a-year tax, but actual stable
+prices in money you can hold in your hand. I’m under no illusions about
+reinstituting the gold standard, but the way forward is to announce a
+resumption of the ideals of the generation of Hamilton and Gallatin.</p>
+<blockquote>
+<p>“Forty-five years ago, Reagan got on television and said the public
+debt had just hit $1 trillion. We’ve gone from $1 trillion in
+<em>principal</em> to $1 trillion of <em>interest expense</em> in a
+lifetime. We’re paying a trillion dollars in interest this fiscal year.
+$39 trillion gross public debt — okay, that’s normal now.”</p>
+</blockquote>
+<hr />
+<h2 id="gold-a-40-year-story">Gold: A 40-Year Story</h2>
+<p><em>[~45:16]</em></p>
+<p><strong>Meb Faber:</strong> You’ve owned gold for 40 years. A lot of
+young folks got seduced by “digital gold,” Bitcoin. Talk about gold’s
+role in a portfolio.</p>
+<p><strong>Jim Grant:</strong> Here’s my gold origin story. I was
+standing in line — mistake number one; never queue up for an investment.
+It was a chilly day early in 1980, close to the peak of <strong>$850 an
+ounce.</strong> I’d persuaded myself this was the monetary moment of
+crisis — the CPI was up 13%, some people paid 20% for a mortgage. As I
+pushed my cashier’s check across for $875, I thought, “Ah, I am
+protected.” Fast forward a few years: with four children and tuitions to
+pay, I had to confess, much to my mortification, that the Krugerrand or
+two I’d “wasted the family cash on” had gone from $850 to about
+<strong>$500.</strong></p>
+<blockquote>
+<p>“That’s something to know about gold as an investment: it can go to
+sleep for 15 or 20 years, leaving you feeling very foolish. It pays
+nothing, earns nothing — it is the Warren Buffett idea of a bad
+investment; Charlie Munger heaped scorn on it. The bear case is in some
+ways irrefutable.”</p>
+</blockquote>
+<p>Gold is a conceptual investment in the willful, orchestrated, managed
+decline of America’s dollar. Why did it go from $2,800 to $5,600 in 18
+months? I don’t know — the conditions were there. Now it’s around
+$4,400. Somehow the world got it into its mind that war is
+<em>bearish</em> for gold. No — <strong>war is bullish for
+gold</strong>, with the other horsemen of the apocalypse. Gold will
+insist on doing what it ought not. Artfully picking the interval, it’s
+outperformed stocks over 20 years — except not every year, and except
+you often felt rather foolish owning it. I own it because I believe the
+dollar has gone 99% down against gold.</p>
+<p>Peculiarly, it’s <strong>central banks</strong> — the very printers
+of irredeemable currency — who’ve been the big buyers, Asia much more
+than the West, while American individuals largely haven’t joined in.
+Gold yields exactly as much as Bitcoin (nothing), but its pedigree is
+better and it’s less volatile — though lately it’s shown some of “the
+speculative bounciness of the crypto world, which I find undignified for
+the ancient monetary metal.”</p>
+<hr />
+<h2 id="building-a-portfolio-in-2026">Building a Portfolio in 2026</h2>
+<p><em>[~52:39]</em></p>
+<p><strong>Meb Faber:</strong> 2026 feels fraught — expensive stocks,
+risky bonds. T-bills and gold? Other assets?</p>
+<p><strong>Jim Grant:</strong> I don’t set up as a financial adviser, so
+take this with a grain of salt — but I invest with people who find a
+great deal to do. At <em>Grant’s</em>, every two weeks we publish a
+security analysis, and we often find <strong>longs</strong> despite the
+elevated CAPE: obscure European banks trading at astonishingly low
+multiples of book and earnings; a UK platform for used-car transactions
+that the market is sure will be cancelled by AI, where we see reasons to
+doubt that. We’ve also taken a shine to <strong>oil</strong>, believing
+the supply-demand balance favors the long side of hydrocarbons whatever
+happens in Iran — a war that’s beginning to feel like a grudge match in
+professional wrestling: the violence felt keenly by those in the way,
+but otherwise oddly performative.</p>
+<hr />
+<h2 id="jims-most-memorable-investment">Jim’s Most Memorable
+Investment</h2>
+<p><em>[~54:36]</em></p>
+<p><strong>Jim Grant:</strong> The year is <strong>2009</strong>, and
+Mr. Market is not feeling well. I recalled Sir John Templeton, who in
+1939–40 — as the Battle of Britain raged and France had been overrun —
+bought shares of everything below two quid in London. So I called the
+broker and said, “Put about $5,000 into all the S&amp;P stocks trading
+below $10.” (That was during the “genius phase” of <em>Grant’s</em>,
+which ended shortly after that phone call.) Some of these things were up
+<strong>20-fold.</strong> It speaks to the extraordinary depths and
+heights Mr. Market can reach.</p>
+<blockquote>
+<p>“The late, great Dick Russell — who wrote the <em>Dow Theory
+Letters</em> — had a humble axiom: <em>markets can do anything.</em>
+Isn’t that good to remember? Just as soon as you think you’ve got it all
+figured out, markets can do anything.”</p>
+</blockquote>
+<hr />
+<h2 id="markets-can-do-anything">Markets Can Do Anything</h2>
+<p><em>[~56:19]</em></p>
+<p><strong>Jim Grant:</strong> A great investor who recently died,
+<strong>Murray Stahl</strong> — who founded Horizon Kinetics (Steve
+Bregman and colleagues now carry it on) — was an unconventional thinker.
+Not the conceited kind of contrarian (“just because everyone’s carrying
+an umbrella doesn’t mean it’s not going to rain”), but a real thinker.
+He believed the virtues of diversification were overdone, because
+diversification means you don’t know enough about what you own. One
+Horizon Kinetics fund had a single <strong>60%-of-AUM position</strong>
+— and it worked out.</p>
+<p>My first book was a biography of <strong>Bernard Baruch</strong>, the
+great speculator, who said:</p>
+<blockquote>
+<p>“I have lost money enough to make the average married man go out and
+shoot himself.”</p>
+</blockquote>
+<p>Baruch taught me the importance of sucking it up, bearing your
+losses, not overly blaming yourself — but <strong>resolving to make a
+different mistake next time.</strong> What makes all of this so
+interesting is the utter unpredictability of the human animal in the
+face of large sums of money. We’re not at our most rational. We “know”
+AI will conquer all; we “know” Elon Musk can’t possibly die broke — yet
+there are trillions of leveraged dollars running on <strong>factually
+indefensible convictions</strong> that may be true, may not be true, but
+are certainly not <em>certainly</em> true.</p>
+<hr />
+<h2 id="the-lesson-of-1984">The Lesson of 1984</h2>
+<p><em>[~1:00:01]</em></p>
+<p><strong>Meb Faber:</strong> One period in history these youngsters
+should read about?</p>
+<p><strong>Jim Grant:</strong> <strong>1984</strong> — a laboratory
+experiment in the bond market and the world’s perception of it. Interest
+rates had peaked at 15% in a 35-year bond bear market (1946–81).
+<strong>Paul Volcker</strong> lowered the boom; Reagan fired the
+air-traffic controllers, setting a new era in labor relations; commodity
+prices — oil especially — tanked. The inflation cycle was, obviously,
+over. But maybe not so obviously: money supply picked up, monetarism
+ruled the roost, and in the spring of 1984 the <strong>30-year Treasury
+briefly traded at 14%</strong> while the CPI was printing about 4% —</p>
+<blockquote>
+<p>“Giving that mythical, clever speculator who bought at exactly 14%
+<strong>ten percentage points of real yield.</strong> Holy mackerel.
+That’s a one-decision bond — you just go away the rest of your lifetime.
+And Wall Street made it easy, selling zero-coupon instruments called
+<strong>CATS, LIONS, and TIGRs</strong> with internal rates of return of
+12–14%.”</p>
+</blockquote>
+<p>Why did people pass it up? Because they recollected the long, brutal
+preceding bear market. I was writing at the time, trying to think of
+reasons to be bullish on bonds, and the bears would say, “I’ve seen
+bonds go down 10 points a year — what are you talking about?” That
+episode is the clearest example of the <strong>perversity of
+markets</strong> — what is so compellingly a bargain in retrospect was,
+at the time, anything but. By 1986 everyone had to have bonds; imagine
+telling them they’d one day yield near zero, some sovereigns negative —
+you’d have been read out of the Wall Street community of knowing
+people.</p>
+<p><strong>Meb Faber:</strong> Jim, this has been a blessing. Listeners,
+check out <em>Grant’s</em> at grantspub.com. Thanks so much.</p>
+<p><strong>Jim Grant:</strong> What a pleasure. Thank you, Meb.</p>
+<p><em>[Aside]</em> <em>[~1:04:53]</em> — Sign-off: show notes at
+mebfaber.com; feedback at themebfabershow.com; please review on iTunes
+and subscribe wherever podcasts are found.</p>
+<hr />
+<h2 id="key-takeaways">Key Takeaways</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Summary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>One of the greatest bubbles of all time</strong></td>
+<td>AI’s excitement <em>dwarfs</em> the dot-com era, with bigger
+inflation-adjusted dollars and a more intrusive Fed. The human
+speculative spirit isn’t grounded by better technology — sometimes it’s
+incited by it.</td>
+</tr>
+<tr>
+<td><strong>The railroad / 1873 analogy</strong></td>
+<td>A transformative technology (rail, steam, the Suez Canal) drove
+prices down 2–3% a year for 20 years — creative destruction. AI’s
+capital draw rivals the railroads, but its payoff is unknowable.</td>
+</tr>
+<tr>
+<td><strong>Sectors fall as far as they rise</strong></td>
+<td>After 1929, industrials took until 1954 to recover and rails until
+1965–66. Air conditioning was transformative yet its stocks traded at
+4–8× earnings.</td>
+</tr>
+<tr>
+<td><strong>Deflation ≠ disaster</strong></td>
+<td>What the Fed calls deflation, a normal person calls progress. The
+dangerous kind is <em>financial</em> deflation — a credit collapse with
+bank failures (2008), not the benign price decline of the railroad
+era.</td>
+</tr>
+<tr>
+<td><strong>The ratchet</strong></td>
+<td>Inflation’s lasting harm isn’t the rate of change — it’s that prices
+went up and <strong>stayed up</strong>. “$10 coffee never came back.”
+Only ratcheting up, never down.</td>
+</tr>
+<tr>
+<td><strong>Where rates <em>were</em> matters</strong></td>
+<td>Near-zero rates in 2020–22 loaded the system with leverage at costs
+that will never recur. That leverage is now the economy’s binding
+constraint.</td>
+</tr>
+<tr>
+<td><strong>Private credit echoes 2008</strong></td>
+<td>One-third of $6 trillion in life-insurance assets sits in private
+credit (Apollo–Athene model). “I don’t know what they’re doing” rhymes
+with the 2005–06 CDO-squared era.</td>
+</tr>
+<tr>
+<td><strong>Powell’s flaw</strong></td>
+<td>Insufficient detachment from the institutional Fed view — and buying
+the “Kafkaesque” idea that 2% inflation is price stability. “2% a year
+is a tax on your cash.”</td>
+</tr>
+<tr>
+<td><strong>Celebrity central bankers</strong></td>
+<td>“If the Fed were doing its job, we wouldn’t know these people’s
+names.” Grant’s fix: peg the funds rate to the 2-year note and reconvene
+next quarter.</td>
+</tr>
+<tr>
+<td><strong>Inflation = too much money</strong></td>
+<td>Not “too much money chasing too few goods” but overstraining — and
+where the money lands is variable (cappuccinos, NYC real estate, stocks,
+$300k/acre farmland).</td>
+</tr>
+<tr>
+<td><strong>The Fed’s hidden constraint</strong></td>
+<td>It cannot aggressively fight inflation amid extreme leverage.
+Federal finances verge on “Ponzi” — borrowing to pay interest; $1tn
+principal in 1980 → $1tn of <em>interest</em> today.</td>
+</tr>
+<tr>
+<td><strong>How to fix the Fed</strong></td>
+<td>Smaller balance sheet, single mandate (stable prices), admit
+insolvency, hold gold, and restore personal responsibility (the gold-era
+double-liability rule).</td>
+</tr>
+<tr>
+<td><strong>Gold</strong></td>
+<td>A conceptual bet on the managed decline of the dollar — pays
+nothing, can “go to sleep for 15–20 years.” War is <em>bullish</em>, not
+bearish. Central banks (esp. Asia) are the big buyers.</td>
+</tr>
+<tr>
+<td><strong>Where Grant finds value (2026)</strong></td>
+<td>Obscure European banks, a UK used-car platform the market thinks AI
+will kill, and long oil — despite a CAPE of 43.</td>
+</tr>
+<tr>
+<td><strong>Markets can do anything</strong></td>
+<td>2009: sub-$10 S&amp;P stocks went up 20-fold. Diversification can
+mean not knowing what you own (Murray Stahl’s 60% position). “Resolve to
+make a different mistake next time.” (Baruch)</td>
+</tr>
+<tr>
+<td><strong>The lesson of 1984</strong></td>
+<td>A 14% 30-year Treasury at ~4% CPI offered <strong>10 points of real
+yield</strong> — a “one-decision bond” — yet was shunned because of the
+prior bear market. The perversity of markets in one chart.</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>
